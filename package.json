@@ -1,0 +1,11 @@
+{
+  "name": "MentalMonsoon",
+  "version": "0.0.1",
+  "description": "A realtime collaboration tool",
+  "dependencies": {
+    "express": "*",
+    "express.io": "~1.1.13",
+    "socket.io": "^1.7.2"
+  },
+  "engine": "node >=0.6.x"
+}
