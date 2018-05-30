@@ -1,11 +1,9 @@
 {
-  "name": "MentalMonsoon",
+  "name": "picturesque",
   "version": "0.0.1",
-  "description": "A realtime collaboration tool",
+  "description": "An image based party game",
   "dependencies": {
-    "express": "*",
-    "express.io": "~1.1.13",
-    "socket.io": "^1.7.2"
-  },
-  "engine": "node >=0.6.x"
+    "express": "^4.15.2",
+    "socket.io": "^2.1.1"
+  }
 }
