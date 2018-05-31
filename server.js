@@ -21,21 +21,35 @@ io.sockets.on('connection', function(socket){
 
   	//When the client disconnects
   	socket.on('disconnect', function(){
-    	console.log('DSCT:'+socket.id);
+    	console.log('DSCT:' + socket.id);
+    	var room = "";
+    	var name = "";
+    	for(var r in roomRoster){
+    		for(var p = 0; p < roomRoster[r].length; p ++){
+    			if((roomRoster[r])[p].id == socket.id){
+    				name = (roomRoster[r])[p].name;
+    				roomRoster[r].splice(p, 1);
+    				room = r + "";
+    			}
+    		}
+    	}
+    	socket.to(room).emit('user left', name);
   	});
 
   	socket.on('join room', function(data){
+  		console.log(roomRoster);
   		var thisRoom = data.room;
   		socket.join(thisRoom);
   		var mydeets = {name:data.name, id:socket.id};
+  		console.log("has room " + thisRoom + " is " + (thisRoom in roomRoster));
   		if(roomRoster.hasOwnProperty(thisRoom)){
-  			roomRoster.thisRoom.push(mydeets);
+  			roomRoster[thisRoom].push(mydeets);
   		}
   		else{
-  			roomRoster.thisRoom = [];
-  			roomRoster.thisRoom.push(mydeets);
+  			roomRoster[thisRoom] = [];
+  			roomRoster[thisRoom].push(mydeets);
   		}
-  		socket.emit('room roster', roomRoster.thisRoom);
+  		socket.emit('room roster', roomRoster[thisRoom]);
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 

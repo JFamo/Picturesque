@@ -26,6 +26,10 @@ socket.on('user joined', function(data){
     $('#namesList').append($('<li>').text(data));
 });
 
+socket.on('user left', function(data){
+    $("li").filter(":contains('" + data + "')").remove();
+});
+
 socket.on('room roster', function(data){
 	for(var i = 0; i < data.length; i ++){
     	$('#namesList').append($('<li>').text(data[i].name));
