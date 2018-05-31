@@ -3,6 +3,9 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+//track people in rooms
+var roomRoster = {};
+
 //give clients public folder, for css and js
 app.use(express.static('public'));
 
@@ -21,13 +24,24 @@ io.sockets.on('connection', function(socket){
     	console.log('DSCT:'+socket.id);
   	});
 
-	socket.on('chat message', function(data){
-    	socket.broadcast.emit('chat message', data);
- 	});
+  	socket.on('join room', function(data){
+  		var thisRoom = data.room;
+  		socket.join(thisRoom);
+  		var mydeets = {name:data.name, id:socket.id};
+  		if(roomRoster.hasOwnProperty(thisRoom)){
+  			roomRoster.thisRoom.push(mydeets);
+  		}
+  		else{
+  			roomRoster.thisRoom = [];
+  			roomRoster.thisRoom.push(mydeets);
+  		}
+  		socket.emit('room roster', roomRoster.thisRoom);
+  		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
+  	});
 
- 	socket.on('user joined', function(data){
-    	socket.broadcast.emit('user joined', data);
- 	});
+  	socket.on('user joined', function(data){
+  		socket.to(data.room).emit('user joined', data.name);
+  	});
 
 });
 

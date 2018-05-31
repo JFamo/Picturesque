@@ -12,28 +12,40 @@
   </head>
 
   <body>
-    <ul id="messages"></ul>
-    <form class="textform" id="messageForm" action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-    <div class="modal" tabindex="-1" role="dialog" id="nameModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Welcome!</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="nameForm">
-              <div class="form-group">
-                <label for="nameInput">Your Name</label>
-                <input type="text" class="form-control" id="nameInput" aria-describedby="nameHelp" placeholder="Anonymous">
-                <small id="nameHelp" class="form-text text-muted">This is how you will appear to other users.</small>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="modal" tabindex="-1" role="dialog" id="nameModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Welcome!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="nameForm">
+                    <div class="form-group">
+                      <label for="nameInput">Your Name</label>
+                      <input type="text" class="form-control" id="nameInput" aria-describedby="nameHelp" placeholder="Anonymous">
+                      <small id="nameHelp" class="form-text text-muted">This is how you will appear to other users.</small>
+                      <br>
+                      <label for="roomInput">Room Name</label>
+                      <input type="text" class="form-control" id="roomInput" aria-describedby="roomHelp" placeholder="game">
+                      <small id="roomHelp" class="form-text text-muted">This is the name of the room you will either create or join.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Join Room</button>
+                  </form>
+                </div>
               </div>
-              <button type="submit" class="btn btn-primary" onclick="joinWithName();">Submit</button>
-            </form>
+            </div>
+          </div>
+          <div id="waitingRoom">
+          <center>
+            <h3>Players in this Room</h3>
+            <ul id="namesList"></ul>
+          </center>
           </div>
         </div>
       </div>
