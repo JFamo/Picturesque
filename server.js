@@ -21,8 +21,12 @@ io.sockets.on('connection', function(socket){
     	console.log('DSCT:'+socket.id);
   	});
 
-	socket.on('chat message', function(msg){
-    	socket.broadcast.emit('chat message', msg);
+	socket.on('chat message', function(data){
+    	socket.broadcast.emit('chat message', data);
+ 	});
+
+ 	socket.on('user joined', function(data){
+    	socket.broadcast.emit('user joined', data);
  	});
 
 });

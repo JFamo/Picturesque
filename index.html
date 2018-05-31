@@ -13,7 +13,7 @@
 
   <body>
     <ul id="messages"></ul>
-    <form class="textform" action="">
+    <form class="textform" id="messageForm" action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <div class="modal" tabindex="-1" role="dialog" id="nameModal">
@@ -26,13 +26,13 @@
             </button>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="nameForm">
               <div class="form-group">
                 <label for="nameInput">Your Name</label>
                 <input type="text" class="form-control" id="nameInput" aria-describedby="nameHelp" placeholder="Anonymous">
                 <small id="nameHelp" class="form-text text-muted">This is how you will appear to other users.</small>
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary" onclick="joinWithName();">Submit</button>
             </form>
           </div>
         </div>

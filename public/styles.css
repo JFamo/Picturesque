@@ -7,3 +7,10 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
 
+.entryMessage{
+	color: red;
+}
+
+.userMessage{
+	color: blue;
+}
