@@ -79,9 +79,11 @@ io.sockets.on('connection', function(socket){
 
   	socket.on('open submission', function(data){
   		//find the current judge, make them not judging
+  		var hasJudge = false;
   		for(var p = 0; p < roomRoster[data].length; p ++){
     		if((roomRoster[data])[p].judging){
     			(roomRoster[data])[p].judging = false;
+    			hasJudge = true;
     			//if at end of list, go back to start
     			if(p == roomRoster[data].length - 1){
     				(roomRoster[data])[0].judging = true;
@@ -93,6 +95,9 @@ io.sockets.on('connection', function(socket){
     				break;
     			}
     		}
+    	}
+    	if(!hasJudge){
+    		(roomRoster[data])[0].judging = true;
     	}
   		io.in(data).emit('open submission', roomRoster[data]);
   	});
