@@ -76,6 +76,12 @@ socket.on('room start', function(data){
 socket.on('open submission', function(data){
 	$('#scoreboard').css('display','none');
 	$('#submission').css('display','block');
+	$('#submissionCaption').text("Submit a photo now.");
+	for(var i = 0; i < data.length; i ++){
+    	if(data[i].id == socket.id && data[i].judging){
+    		$('#submissionCaption').text("You are judging this round, please wait...");
+    	}
+	}
 });
 
 socket.on('show judging', function(data){
