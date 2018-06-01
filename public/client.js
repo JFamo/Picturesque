@@ -3,8 +3,6 @@
 //connect
 var socket = io.connect();
 
-console.log("MEEE" + socket.id);
-
 //USER VARIABLES
 var username = "DefaultUser";
 
@@ -13,6 +11,7 @@ $('#nameModal').modal();
 
 //FORM SUBMITS
 $('#nameForm').submit(function(){
+	console.log("ME : " + socket.id);
 	var send = {};
 	username = $('#nameInput').val();
 	send.room = $('#roomInput').val();
@@ -39,6 +38,7 @@ $('#chooseWinnerForm').submit(function(){
 	var send = {};
 	send.room = $('#roomHeader').text();
 	send.name = $('#nameHeader').text();
+	send.id = socket.id;
 	socket.emit('show winner', send);
 	return false;
 });

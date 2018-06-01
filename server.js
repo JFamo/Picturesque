@@ -25,6 +25,7 @@ io.sockets.on('connection', function(socket){
     	console.log('DSCT:' + socket.id);
     	var room = "";
     	var name = "";
+    	//find the ID in the room roster matching the disconnecting ID
     	for(var r in roomRoster){
     		for(var p = 0; p < roomRoster[r].length; p ++){
     			if((roomRoster[r])[p].id == socket.id){
@@ -38,45 +39,68 @@ io.sockets.on('connection', function(socket){
   	});
 
   	socket.on('join room', function(data){
+  		//join the room, create my details object
   		var thisRoom = data.room;
   		socket.join(thisRoom);
   		var mydeets = {name:data.name, id:socket.id, points:0, judging:false};
+  		//if the room exists, add me
   		if(roomRoster.hasOwnProperty(thisRoom)){
   			roomRoster[thisRoom].push(mydeets);
   		}
+  		//if the room does not exist, initialize it
   		else{
   			roomRoster[thisRoom] = [];
+  			mydeets.judging = true;		//I am the first one in the room, so I have to be a judge
   			roomRoster[thisRoom].push(mydeets);
   		}
   		socket.emit('room roster', roomRoster[thisRoom]);
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 
+  	//bounce
   	socket.on('show score', function(data){
   		io.in(data).emit('show score', roomRoster[data]);
   	});
 
   	socket.on('show winner', function(data){
+  		//find the person whose name is the winner, give them a point
   		for(var p = 0; p < roomRoster[data.room].length; p ++){
-    		if((roomRoster[data.room])[p].name == data.name){
+    		if((roomRoster[data.room])[p].id == data.id){
     			(roomRoster[data.room])[p].points += 1;
     		}
     	}
   		io.in(data.room).emit('show winner', data.name);
   	});
 
+  	//bounce
   	socket.on('show judging', function(data){
   		io.in(data).emit('show judging', roomRoster[data]);
   	});
 
   	socket.on('open submission', function(data){
+  		//find the current judge, make them not judging
+  		for(var p = 0; p < roomRoster[data].length; p ++){
+    		if((roomRoster[data])[p].judging){
+    			(roomRoster[data])[p].judging = false;
+    			//if at end of list, go back to start
+    			if(p == roomRoster[data].length - 1){
+    				(roomRoster[data])[0].judging = true;
+    			}
+    			//else make next person the judge
+    			else{
+    				(roomRoster[data])[p + 1].judging = true;
+    			}
+    		}
+    	}
   		io.in(data).emit('open submission', roomRoster[data]);
   	});
 
+  	//bounce
   	socket.on('user joined', function(data){
   		socket.to(data.room).emit('user joined', data.name);
   	});
 
+  	//bounce
   	socket.on('room start', function(data){
   		io.in(data).emit('room start', data);
   	});
