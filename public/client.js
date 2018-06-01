@@ -100,6 +100,8 @@ socket.on('show score', function(data){
 	$('#scoreList').text("");
 	$('#winner').css('display','none');
 	$('#scoreboard').css('display','block');
+	data.sort(function(a,b){return a.points - b.points});
+	data.reverse();
 	for(var i = 0; i < data.length; i ++){
     	$('#scoreList').append($('<li>').text(data[i].name + " : " + data[i].points));
 	}
