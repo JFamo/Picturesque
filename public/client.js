@@ -22,6 +22,11 @@ $('#nameForm').submit(function(){
 	return false;
 });
 
+$('#startRoomForm').submit(function(){
+	socket.emit('room start', $('#roomHeader').text());
+	return false;
+});
+
 //SOCKET FUNCTIONS
 socket.on('user joined', function(data){
     $('#namesList').append($('<li>').text(data));
@@ -35,4 +40,8 @@ socket.on('room roster', function(data){
 	for(var i = 0; i < data.length; i ++){
     	$('#namesList').append($('<li>').text(data[i].name));
 	}
+});
+
+socket.on('room start', function(data){
+	$('#waitingRoom').css('display','none');
 });

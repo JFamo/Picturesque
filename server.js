@@ -57,6 +57,10 @@ io.sockets.on('connection', function(socket){
   		socket.to(data.room).emit('user joined', data.name);
   	});
 
+  	socket.on('room start', function(data){
+  		io.in(data).emit('room start', data);
+  	});
+
 });
 
 //give the app a port and start
