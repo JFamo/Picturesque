@@ -15,6 +15,7 @@ $('#nameForm').submit(function(){
 	username = $('#nameInput').val();
 	send.room = $('#roomInput').val();
 	send.name = $('#nameInput').val();
+	$('#roomHeader').text(send.room);
 	socket.emit('join room', send);
 	socket.emit('user joined', send);
 	$('#nameModal').modal('hide');
