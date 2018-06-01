@@ -48,6 +48,11 @@ $('#showScoreForm').submit(function(){
 	return false;
 });
 
+$('#newRoundForm').submit(function(){
+	socket.emit('open submission', $('#roomHeader').text());
+	return false;
+});
+
 //SOCKET FUNCTIONS
 socket.on('user joined', function(data){
     $('#namesList').append($('<li>').text(data));
@@ -69,6 +74,7 @@ socket.on('room start', function(data){
 });
 
 socket.on('open submission', function(data){
+	$('#scoreboard').css('display','none');
 	$('#submission').css('display','block');
 });
 
@@ -91,6 +97,7 @@ socket.on('show winner', function(data){
 });
 
 socket.on('show score', function(data){
+	$('#scoreList').text("");
 	$('#winner').css('display','none');
 	$('#scoreboard').css('display','block');
 	for(var i = 0; i < data.length; i ++){

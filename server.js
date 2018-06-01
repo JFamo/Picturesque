@@ -85,10 +85,12 @@ io.sockets.on('connection', function(socket){
     			//if at end of list, go back to start
     			if(p == roomRoster[data].length - 1){
     				(roomRoster[data])[0].judging = true;
+    				break;
     			}
     			//else make next person the judge
     			else{
     				(roomRoster[data])[p + 1].judging = true;
+    				break;
     			}
     		}
     	}
