@@ -15,7 +15,10 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-//general functions
+//~~~~~~~~~~~~GENERAL FUNCTIONS~~~~~~~~~~~~~
+
+//updates the current judge in the room roster
+//data is the room name
 function ChangeJudge(data){
 	//find the current judge, make them not judging
 	var hasJudge = false;
@@ -38,6 +41,16 @@ function ChangeJudge(data){
 	if(!hasJudge){
 		(roomRoster[data])[0].judging = true;
 	}
+}
+
+//shows the scoreboard and returns to submission after 5 secs
+//data is the room name
+function ShowScore(data){
+	io.in(data).emit('show score', roomRoster[data]);
+  	setTimeout(function () {
+        ChangeJudge(data);
+		io.in(data).emit('open submission', roomRoster[data]);
+    }, 5000);
 }
 
 //socket io functions
@@ -82,15 +95,6 @@ io.sockets.on('connection', function(socket){
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 
-  	//bounce
-  	socket.on('show score', function(data){
-  		io.in(data).emit('show score', roomRoster[data]);
-  		setTimeout(function () {
-        	ChangeJudge(data);
-			io.in(data).emit('open submission', roomRoster[data]);
-    	}, 5000);
-  	});
-
   	socket.on('show winner', function(data){
   		//find the person whose name is the winner, give them a point
   		for(var p = 0; p < roomRoster[data.room].length; p ++){
@@ -99,12 +103,8 @@ io.sockets.on('connection', function(socket){
     		}
     	}
   		io.in(data.room).emit('show winner', data.name);
-  		setTimeout(function () {
-        	io.in(data).emit('show score', roomRoster[data]);
-	  		setTimeout(function () {
-	        	ChangeJudge(data);
-				io.in(data).emit('open submission', roomRoster[data]);
-	    	}, 5000);
+  		setTimeout(function (data) {
+        	ShowScore(data.room);
     	}, 5000);
   	});
 
