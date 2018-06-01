@@ -57,7 +57,12 @@ io.sockets.on('connection', function(socket){
   	});
 
   	socket.on('show winner', function(data){
-  		io.in(data).emit('show winner', roomRoster[data]);
+  		for(var p = 0; p < roomRoster[data.room].length; p ++){
+    		if((roomRoster[data.room])[p].name == data.name){
+    			(roomRoster[data.room])[p].points += 1;
+    		}
+    	}
+  		io.in(data.room).emit('show winner', data.name);
   	});
 
   	socket.on('show judging', function(data){
