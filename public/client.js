@@ -33,7 +33,7 @@ socket.on('user joined', function(data){
 });
 
 socket.on('user left', function(data){
-    $("li").filter(":contains('" + data + "')").remove();
+    $("li").filter(":contains('" + data + "')").first().remove();
 });
 
 socket.on('room roster', function(data){
@@ -44,4 +44,12 @@ socket.on('room roster', function(data){
 
 socket.on('room start', function(data){
 	$('#waitingRoom').css('display','none');
+	socket.emit('show score', $('#roomHeader').text());
+});
+
+socket.on('show score', function(data){
+	$('#scoreboard').css('display','block');
+	for(var i = 0; i < data.length; i ++){
+    	$('#scoreList').append($('<li>').text(data[i].name + " : " + data[i].points));
+	}
 });

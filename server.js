@@ -37,11 +37,9 @@ io.sockets.on('connection', function(socket){
   	});
 
   	socket.on('join room', function(data){
-  		console.log(roomRoster);
   		var thisRoom = data.room;
   		socket.join(thisRoom);
-  		var mydeets = {name:data.name, id:socket.id};
-  		console.log("has room " + thisRoom + " is " + (thisRoom in roomRoster));
+  		var mydeets = {name:data.name, id:socket.id, points:0};
   		if(roomRoster.hasOwnProperty(thisRoom)){
   			roomRoster[thisRoom].push(mydeets);
   		}
@@ -51,6 +49,10 @@ io.sockets.on('connection', function(socket){
   		}
   		socket.emit('room roster', roomRoster[thisRoom]);
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
+  	});
+
+  	socket.on('show score', function(data){
+  		io.in(data).emit('show score', roomRoster[data]);
   	});
 
   	socket.on('user joined', function(data){
