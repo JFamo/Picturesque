@@ -15,6 +15,31 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+//general functions
+function ChangeJudge(data){
+	//find the current judge, make them not judging
+	var hasJudge = false;
+	for(var p = 0; p < roomRoster[data].length; p ++){
+	if((roomRoster[data])[p].judging){
+		(roomRoster[data])[p].judging = false;
+		hasJudge = true;
+		//if at end of list, go back to start
+		if(p == roomRoster[data].length - 1){
+			(roomRoster[data])[0].judging = true;
+			break;
+		}
+		//else make next person the judge
+		else{
+			(roomRoster[data])[p + 1].judging = true;
+			break;
+			}
+		}
+	}	
+	if(!hasJudge){
+		(roomRoster[data])[0].judging = true;
+	}
+}
+
 //socket io functions
 io.sockets.on('connection', function(socket){
 
@@ -60,6 +85,10 @@ io.sockets.on('connection', function(socket){
   	//bounce
   	socket.on('show score', function(data){
   		io.in(data).emit('show score', roomRoster[data]);
+  		setTimeout(function () {
+        	ChangeJudge(data);
+			io.in(data).emit('open submission', roomRoster[data]);
+    	}, 5000);
   	});
 
   	socket.on('show winner', function(data){
@@ -70,6 +99,13 @@ io.sockets.on('connection', function(socket){
     		}
     	}
   		io.in(data.room).emit('show winner', data.name);
+  		setTimeout(function () {
+        	io.in(data).emit('show score', roomRoster[data]);
+	  		setTimeout(function () {
+	        	ChangeJudge(data);
+				io.in(data).emit('open submission', roomRoster[data]);
+	    	}, 5000);
+    	}, 5000);
   	});
 
   	//bounce
@@ -78,29 +114,9 @@ io.sockets.on('connection', function(socket){
   	});
 
   	socket.on('open submission', function(data){
-  		//find the current judge, make them not judging
-  		var hasJudge = false;
-  		for(var p = 0; p < roomRoster[data].length; p ++){
-    		if((roomRoster[data])[p].judging){
-    			(roomRoster[data])[p].judging = false;
-    			hasJudge = true;
-    			//if at end of list, go back to start
-    			if(p == roomRoster[data].length - 1){
-    				(roomRoster[data])[0].judging = true;
-    				break;
-    			}
-    			//else make next person the judge
-    			else{
-    				(roomRoster[data])[p + 1].judging = true;
-    				break;
-    			}
-    		}
-    	}
-    	if(!hasJudge){
-    		(roomRoster[data])[0].judging = true;
-    	}
-  		io.in(data).emit('open submission', roomRoster[data]);
-  	});
+		ChangeJudge(data);
+		io.in(data).emit('open submission', roomRoster[data]);
+	});
 
   	//bounce
   	socket.on('user joined', function(data){

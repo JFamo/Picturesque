@@ -48,11 +48,6 @@ $('#showScoreForm').submit(function(){
 	return false;
 });
 
-$('#newRoundForm').submit(function(){
-	socket.emit('open submission', $('#roomHeader').text());
-	return false;
-});
-
 //SOCKET FUNCTIONS
 socket.on('user joined', function(data){
     $('#namesList').append($('<li>').text(data));
