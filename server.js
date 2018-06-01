@@ -5,6 +5,7 @@ var io = require('socket.io')(http);
 
 //track people in rooms
 var roomRoster = {};
+var roomProgress = {};
 
 //give clients public folder, for css and js
 app.use(express.static('public'));
@@ -39,7 +40,7 @@ io.sockets.on('connection', function(socket){
   	socket.on('join room', function(data){
   		var thisRoom = data.room;
   		socket.join(thisRoom);
-  		var mydeets = {name:data.name, id:socket.id, points:0};
+  		var mydeets = {name:data.name, id:socket.id, points:0, judging:false};
   		if(roomRoster.hasOwnProperty(thisRoom)){
   			roomRoster[thisRoom].push(mydeets);
   		}
@@ -53,6 +54,18 @@ io.sockets.on('connection', function(socket){
 
   	socket.on('show score', function(data){
   		io.in(data).emit('show score', roomRoster[data]);
+  	});
+
+  	socket.on('show winner', function(data){
+  		io.in(data).emit('show winner', roomRoster[data]);
+  	});
+
+  	socket.on('show judging', function(data){
+  		io.in(data).emit('show judging', roomRoster[data]);
+  	});
+
+  	socket.on('open submission', function(data){
+  		io.in(data).emit('open submission', roomRoster[data]);
   	});
 
   	socket.on('user joined', function(data){
