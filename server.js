@@ -229,7 +229,9 @@ io.sockets.on('connection', function(socket){
             var missingSubmission = false;
             for(var p = 0; p < roomSubmissions[data.room].length; p ++){
 				if((roomSubmissions[data.room])[p].submission == null){
-					missingSubmission = true;
+					if((roomRoster[data.room])[p].judging == false){
+						missingSubmission = true;
+					}
 				}
 			}
 			if(!missingSubmission){

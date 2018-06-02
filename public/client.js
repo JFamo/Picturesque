@@ -108,13 +108,15 @@ socket.on('room start', function(data){
 
 socket.on('open submission', function(data){
 	$('#scoreboard').css('display','none');
+	$('#submissionForm').css('display','block');
 	$('#submission').css('display','block');
 	document.getElementById('submissionImage').setAttribute('src', "");
 	document.getElementById('submissionImage').setAttribute('alt', "");
 	$('#submissionCaption').text("Submit a photo that best represents the prompt below.");
 	for(var i = 0; i < data.length; i ++){
     	if(data[i].id == socket.id && data[i].judging){
-    		$('#submissionCaption').text("You are judging this round, please wait...");
+    		$('#submissionCaption').text("You are judging this round. The prompt for this round is...");
+    		$('#submissionForm').css('display','none');
     	}
 	}
 });
