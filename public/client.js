@@ -43,11 +43,6 @@ $('#chooseWinnerForm').submit(function(){
 	return false;
 });
 
-$('#showScoreForm').submit(function(){
-	socket.emit('show score', $('#roomHeader').text());
-	return false;
-});
-
 //SOCKET FUNCTIONS
 socket.on('user joined', function(data){
     $('#namesList').append($('<li>').text(data));
@@ -95,6 +90,10 @@ socket.on('show winner', function(data){
 	$('#judging').css('display','none');
 	$('#winner').css('display','block');
 	$('#winnerName').text("The winner is " + data + "!");
+});
+
+socket.on('prompt', function(data){
+	$('#prompt').text(data);
 });
 
 socket.on('show score', function(data){

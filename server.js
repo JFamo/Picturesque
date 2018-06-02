@@ -2,6 +2,7 @@ var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var fs = require("fs");
 
 //track people in rooms
 var roomRoster = {};
@@ -14,6 +15,11 @@ app.use(express.static('public'));
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
+
+//open prompts text file into array
+var text = fs.readFileSync("./prompts.txt").toString('utf-8');
+var prompts = text.split("\n");
+console.log(prompts);
 
 //~~~~~~~~~~~~GENERAL FUNCTIONS~~~~~~~~~~~~~
 
@@ -49,6 +55,7 @@ function ShowScore(data){
 	io.in(data).emit('show score', roomRoster[data]);
   	setTimeout(function () {
         ChangeJudge(data);
+        io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
 		io.in(data).emit('open submission', roomRoster[data]);
     }, 5000);
 }
@@ -115,6 +122,7 @@ io.sockets.on('connection', function(socket){
 
   	socket.on('open submission', function(data){
 		ChangeJudge(data);
+		io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
 		io.in(data).emit('open submission', roomRoster[data]);
 	});
 
