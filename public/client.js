@@ -5,6 +5,7 @@ var socket = io.connect();
 
 //USER VARIABLES
 var username = "DefaultUser";
+var imgChunks = [];
 
 //start user login modal
 $('#nameModal').modal();
@@ -105,4 +106,10 @@ socket.on('show score', function(data){
 	for(var i = 0; i < data.length; i ++){
     	$('#scoreList').append($('<li>').text(data[i].name + " : " + data[i].points));
 	}
+});
+
+socket.on('img-chunk', function(chunk){
+	var img = document.getElementByID('winnerImage');
+	imgChunks.push(chunk);
+	img.setAttribute('src', 'data:image/jpeg;base64,' + window.btoa(imgChunks));
 });

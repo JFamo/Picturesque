@@ -3,6 +3,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require("fs");
+var path = require("path");
 
 //track people in rooms
 var roomRoster = {};
@@ -19,7 +20,6 @@ app.get('/', function(req, res){
 //open prompts text file into array
 var text = fs.readFileSync("./prompts.txt").toString('utf-8');
 var prompts = text.split("\n");
-console.log(prompts);
 
 //~~~~~~~~~~~~GENERAL FUNCTIONS~~~~~~~~~~~~~
 
@@ -105,10 +105,20 @@ io.sockets.on('connection', function(socket){
   	socket.on('show winner', function(data){
   		//find the person whose name is the winner, give them a point
   		for(var p = 0; p < roomRoster[data.room].length; p ++){
-    			if((roomRoster[data.room])[p].id == data.id){
-    				(roomRoster[data.room])[p].points += 1;
-    			}
-    		}
+			if((roomRoster[data.room])[p].id == data.id){
+				(roomRoster[data.room])[p].points += 1;
+			}
+		}
+		//grab and send winner image
+		var readStream = fs.createReadStream(path.resolve(__dirname, './blangdon.jpg'), {
+			encoding: 'binary'
+		}), chunks = [];
+
+		readStream.on('data', function(chunk){
+			chunks.push(chunk);
+			socket.emit('img-chunk', chunk);
+		});
+
   		io.in(data.room).emit('show winner', data.name);
   		setTimeout(function(){
   			ShowScore(data.room);
