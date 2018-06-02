@@ -139,7 +139,6 @@ io.sockets.on('connection', function(socket){
   			(roomSubmissions[thisRoom]).push(mydeets);
   		}
   		socket.emit('room roster', roomRoster[thisRoom]);
-  		console.log(roomSubmissions);
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 
@@ -213,6 +212,12 @@ io.sockets.on('connection', function(socket){
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
                 socket.emit('image done', {'Image' : 'Images/' + Name});
             });
+            for(var p = 0; p < roomSubmissions[data.room].length; p ++){
+				if((roomSubmissions[data.room])[p].id == socket.id){
+					(roomSubmissions[data.room])[p].submission = Name;
+				}
+			}
+            console.log(roomSubmissions);
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
