@@ -12,7 +12,7 @@
   </head>
 
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid" id="containerObj">
       <nav class="navbar navbar-light bg-light">
         <span style="float:left;" id="roomHeader" class="navbar-brand mb-0 h1">Room</span>
         <span style="float:right;" id="nameHeader" class="navbar-brand mb-0 h1">Name</span>
@@ -59,9 +59,14 @@
               <h3>Submission</h3>
               <h6 id="submissionCaption">Submit a photo that best represents the prompt below.</h6>
               <h4 style="padding-top:10px; padding-bottom:10px;" class="text-primary" id="prompt"></h4>
-              <form id="closeSubmissionForm">
-                <button type="submit" class="btn btn-primary">Close Submission</button>
+              <form id="submissionForm">
+                <div class="form-group">
+                  <input type="file" class="form-control-file" id="fileUpload" accept=".jpg, .jpeg, .png, .gif">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
               </form>
+              <img id="submissionImage" src=""/>
+              <canvas id="submissionCanvas" />
             </center>
           </div>
           <div id="judging" style="display:none;">
@@ -71,6 +76,7 @@
               <form id="chooseWinnerForm">
                 <button type="submit" class="btn btn-primary">Choose Winner</button>
               </form>
+              <div id="picDisplays"></div>
             </center>
           </div>
           <div id="winner" style="display:none;">

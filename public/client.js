@@ -1,5 +1,17 @@
 'use strict';
 
+//check if my broswer supports the things we need
+window.addEventListener("load", Ready); 
+ 
+function Ready(){ 
+    if(window.File && window.FileReader){ 
+    	console.log("Found correct APIs");
+    }
+    else{
+        document.getElementById('containerObj').innerHTML = "Your Browser Doesn't Support The File API! Please Update Your Browser.";
+    }
+}
+
 //connect
 var socket = io.connect();
 
@@ -25,13 +37,13 @@ $('#nameForm').submit(function(){
 	return false;
 });
 
-$('#startRoomForm').submit(function(){
-	socket.emit('room start', $('#roomHeader').text());
+$('#closeSubmissionForm').submit(function(){
+	socket.emit('show judging', $('#roomHeader').text());
 	return false;
 });
 
-$('#closeSubmissionForm').submit(function(){
-	socket.emit('show judging', $('#roomHeader').text());
+$('#startRoomForm').submit(function(){
+	socket.emit('room start', $('#roomHeader').text());
 	return false;
 });
 
@@ -41,6 +53,21 @@ $('#chooseWinnerForm').submit(function(){
 	send.name = $('#nameHeader').text();
 	send.id = socket.id;
 	socket.emit('show winner', send);
+	return false;
+});
+
+$('#submissionForm').submit(function(){
+	/**take the uploaded file, put it in the img tag
+	var imagePath = document.getElementById("fileUpload").value;
+	document.getElementById("submissionImage").setAttribute('src', imagePath);
+	//draw image from img tag onto canvas
+	var c=document.getElementById("submissionCanvas");
+    var ctx=c.getContext("2d");
+    var img=document.getElementById("submissionImage");
+    ctx.drawImage(img,10,10);
+	var send = {};
+	send.image = c.toDataURL();**/
+	socket.emit('show judging', $('#roomHeader').text());
 	return false;
 });
 

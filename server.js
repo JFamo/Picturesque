@@ -110,7 +110,7 @@ io.sockets.on('connection', function(socket){
 			}
 		}
 		//grab and send winner image
-		var readStream = fs.createReadStream(path.resolve(__dirname, './blangdon.jpg'), {
+		var readStream = fs.createReadStream(path.resolve(__dirname, "./blangdon.jpg"), {
 			encoding: 'binary'
 		}), chunks = [];
 
