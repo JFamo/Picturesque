@@ -11,6 +11,7 @@ var roomProgress = {};
 
 //give clients public folder, for css and js
 app.use(express.static('public'));
+app.use('/Images', express.static('Images'));
 
 //serve index.html
 app.get('/', function(req, res){

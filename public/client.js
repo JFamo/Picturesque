@@ -22,7 +22,7 @@ var imgChunks = [];
 var SelectedFile;
 var FReader;
 var fileName;
-var Path = "http://localhost/";
+var Path = "http://localhost:8080/";
 
 //start user login modal
 $('#nameModal').modal();
