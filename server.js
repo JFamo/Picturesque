@@ -103,7 +103,9 @@ io.sockets.on('connection', function(socket){
     			}
     		}
   		io.in(data.room).emit('show winner', data.name);
-  		setTimeout(ShowScore(data.room), 5000);
+  		setTimeout(function(){
+  			ShowScore(data.room);
+  		}, 5000);
   	});
 
   	//bounce
