@@ -55,12 +55,31 @@ function ChangeJudge(data){
 //data is the room name
 function ShowScore(data){
 	io.in(data).emit('show score', roomRoster[data]);
+	rmDir("Images", false);
   	setTimeout(function () {
         ChangeJudge(data);
         io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
 		io.in(data).emit('open submission', roomRoster[data]);
     }, 5000);
 }
+
+//clears the Images folder
+function rmDir(dirPath, removeSelf) {
+      if (removeSelf === undefined)
+        removeSelf = true;
+      try { var files = fs.readdirSync(dirPath); }
+      catch(e) { return; }
+      if (files.length > 0)
+        for (var i = 0; i < files.length; i++) {
+          var filePath = path.join(dirPa, files[i]);
+          if (fs.statSync(filePath).isFile())
+            fs.unlinkSync(filePath);
+          else
+            rmDir(filePath);
+        }
+      if (removeSelf)
+        fs.rmdirSync(dirPath);
+    };
 
 //socket io functions
 io.sockets.on('connection', function(socket){
