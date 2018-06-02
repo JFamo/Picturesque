@@ -72,7 +72,7 @@ function rmDir(dirPath, removeSelf) {
       catch(e) { return; }
       if (files.length > 0)
         for (var i = 0; i < files.length; i++) {
-          var filePath = path.join(dirPa, files[i]);
+          var filePath = path.join(dirPath, files[i]);
           if (fs.statSync(filePath).isFile())
             fs.unlinkSync(filePath);
           else
@@ -149,8 +149,15 @@ io.sockets.on('connection', function(socket){
 				(roomRoster[data.room])[p].points += 1;
 			}
 		}
+		//find the image name of the winner
+		var winnerImagePath;
+		for(var p = 0; p < roomSubmissions[data.room].length; p ++){
+			if((roomSubmissions[data.room])[p].id == data.id){
+				winnerImagePath = "./Images/" + (roomSubmissions[data.room])[p].submission;
+			}
+		}
 		//grab and send winner image
-		var readStream = fs.createReadStream(path.resolve(__dirname, "./blangdon.jpg"), {
+		var readStream = fs.createReadStream(path.resolve(__dirname, winnerImagePath), {
 			encoding: 'binary'
 		}), chunks = [];
 

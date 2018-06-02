@@ -66,11 +66,6 @@ $('#nameForm').submit(function(){
 	return false;
 });
 
-$('#closeSubmissionForm').submit(function(){
-	socket.emit('show judging', $('#roomHeader').text());
-	return false;
-});
-
 $('#startRoomForm').submit(function(){
 	socket.emit('room start', $('#roomHeader').text());
 	return false;
@@ -87,6 +82,7 @@ $('#chooseWinnerForm').submit(function(){
 
 $('#submissionForm').submit(function(){
 	StartUpload();
+	$('#submissionForm').css('display','none');
 	return false;
 });
 
@@ -113,6 +109,8 @@ socket.on('room start', function(data){
 socket.on('open submission', function(data){
 	$('#scoreboard').css('display','none');
 	$('#submission').css('display','block');
+	document.getElementById('submissionImage').setAttribute('src', "");
+	document.getElementById('submissionImage').setAttribute('alt', "");
 	$('#submissionCaption').text("Submit a photo that best represents the prompt below.");
 	for(var i = 0; i < data.length; i ++){
     	if(data[i].id == socket.id && data[i].judging){
