@@ -85,7 +85,7 @@ $('#chooseWinnerForm').submit(function(){
 
 $('#submissionForm').submit(function(){
 	StartUpload();
-	socket.emit('show judging', $('#roomHeader').text());
+	//socket.emit('show judging', $('#roomHeader').text());
 	return false;
 });
 
@@ -161,11 +161,7 @@ socket.on('img-chunk', function(chunk){
 
 socket.on('MoreData', function (data){
     var Place = data['Place'] * 524288; //The Next Blocks Starting Position
-    var NewFile; //The Variable that will hold the new Block of Data
-    if(SelectedFile.webkitSlice) 
-        NewFile = SelectedFile.webkitSlice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
-    else
-        NewFile = SelectedFile.mozSlice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
+    var NewFile = SelectedFile.slice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
     FReader.readAsBinaryString(NewFile);
 });
 

@@ -171,7 +171,7 @@ io.sockets.on('connection', function(socket){
         if(Files[Name]['Downloaded'] == Files[Name]['FileSize']) //If File is Fully Uploaded
         {
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
-                socket.emit('image done', {'Image' : 'Images/' + Name + '.jpg'});
+                socket.emit('image done', {'Image' : 'Images/' + Name});
             });
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
