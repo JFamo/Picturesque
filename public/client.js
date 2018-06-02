@@ -6,6 +6,7 @@ window.addEventListener("load", Ready);
 function Ready(){ 
     if(window.File && window.FileReader){ 
     	console.log("Found correct APIs");
+    	document.getElementById('fileUpload').addEventListener('change', FileChosen);
     }
     else{
         document.getElementById('containerObj').innerHTML = "Your Browser Doesn't Support The File API! Please Update Your Browser.";
@@ -18,9 +19,34 @@ var socket = io.connect();
 //USER VARIABLES
 var username = "DefaultUser";
 var imgChunks = [];
+var SelectedFile;
+var FReader;
+var fileName;
 
 //start user login modal
 $('#nameModal').modal();
+
+//GENERAL FUNCTIONS
+function FileChosen(evnt) {
+    SelectedFile = evnt.target.files[0];
+    document.getElementById('fileNameInput').value = SelectedFile.name;
+}
+
+function StartUpload(){
+    if(document.getElementById('fileUpload').value != "")
+    {
+        FReader = new FileReader();
+        fileName = document.getElementById('fileNameInput').value;
+        FReader.onload = function(evnt){
+            socket.emit('file upload', { 'Name' : fileName, Data : evnt.target.result });
+        }
+        socket.emit('file start', { 'Name' : fileName, 'Size' : SelectedFile.size });
+    }
+    else
+    {
+        window.alert("Please Select A File");
+    }
+}
 
 //FORM SUBMITS
 $('#nameForm').submit(function(){
@@ -57,16 +83,7 @@ $('#chooseWinnerForm').submit(function(){
 });
 
 $('#submissionForm').submit(function(){
-	/**take the uploaded file, put it in the img tag
-	var imagePath = document.getElementById("fileUpload").value;
-	document.getElementById("submissionImage").setAttribute('src', imagePath);
-	//draw image from img tag onto canvas
-	var c=document.getElementById("submissionCanvas");
-    var ctx=c.getContext("2d");
-    var img=document.getElementById("submissionImage");
-    ctx.drawImage(img,10,10);
-	var send = {};
-	send.image = c.toDataURL();**/
+	StartUpload();
 	socket.emit('show judging', $('#roomHeader').text());
 	return false;
 });
