@@ -6,8 +6,9 @@ var fs = require("fs");
 var path = require("path");
 
 //track people in rooms
-var roomRoster = {};
-var roomProgress = {};
+var roomRoster = {};		//contains names, ids, judging
+var roomProgress = {};		//contains states of rooms
+var roomSubmissions = {};	//associates users with pictures they submitted
 
 //give clients public folder, for css and js
 app.use(express.static('public'));
@@ -101,6 +102,14 @@ io.sockets.on('connection', function(socket){
     			}
     		}
     	}
+    	//remove my record from the submissions tracking
+    	for(var r in roomSubmissions){
+    		for(var p = 0; p < roomSubmissions[r].length; p ++){
+    			if((roomSubmissions[r])[p].id == socket.id){
+    				roomSubmissions[r].splice(p, 1);
+    			}
+    		}
+    	}
     	socket.to(room).emit('user left', name);
   	});
 
@@ -119,7 +128,18 @@ io.sockets.on('connection', function(socket){
   			mydeets.judging = true;		//I am the first one in the room, so I have to be a judge
   			roomRoster[thisRoom].push(mydeets);
   		}
+  		//same thing for room submissions
+  		mydeets = {id:socket.id, submission:null};
+  		if(roomSubmissions.hasOwnProperty(thisRoom)){
+  			(roomSubmissions[thisRoom]).push(mydeets);
+  		}
+  		//if the room does not exist, initialize it
+  		else{
+  			roomSubmissions[thisRoom] = [];
+  			(roomSubmissions[thisRoom]).push(mydeets);
+  		}
   		socket.emit('room roster', roomRoster[thisRoom]);
+  		console.log(roomSubmissions);
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 
