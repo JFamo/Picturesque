@@ -109,7 +109,7 @@ socket.on('show score', function(data){
 });
 
 socket.on('img-chunk', function(chunk){
-	var img = document.getElementByID('winnerImage');
+	var img = document.getElementById('winnerImage');
 	imgChunks.push(chunk);
 	img.setAttribute('src', 'data:image/jpeg;base64,' + window.btoa(imgChunks));
 });

@@ -114,9 +114,17 @@ io.sockets.on('connection', function(socket){
 			encoding: 'binary'
 		}), chunks = [];
 
+		readStream.on('readable', function(chunk){
+			console.log("Image loading");
+		});
+
 		readStream.on('data', function(chunk){
 			chunks.push(chunk);
-			socket.emit('img-chunk', chunk);
+			io.in(data.room).emit('img-chunk', chunk);
+		});
+
+		readStream.on('end', function(chunk){
+			console.log("Image loaded");
 		});
 
   		io.in(data.room).emit('show winner', data.name);
