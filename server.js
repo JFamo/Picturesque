@@ -10,7 +10,7 @@ var roomRoster = {};
 var roomProgress = {};
 
 //give clients public folder, for css and js
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 //serve index.html
 app.get('/', function(req, res){
