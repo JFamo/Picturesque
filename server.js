@@ -212,12 +212,22 @@ io.sockets.on('connection', function(socket){
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
                 socket.emit('image done', {'Image' : 'Images/' + Name});
             });
+            //add this to the user's submissions
             for(var p = 0; p < roomSubmissions[data.room].length; p ++){
 				if((roomSubmissions[data.room])[p].id == socket.id){
 					(roomSubmissions[data.room])[p].submission = Name;
 				}
 			}
-            console.log(roomSubmissions);
+            //check if everyone has submitted something
+            var missingSubmission = false;
+            for(var p = 0; p < roomSubmissions[data.room].length; p ++){
+				if((roomSubmissions[data.room])[p].submission == null){
+					missingSubmission = true;
+				}
+			}
+			if(!missingSubmission){
+				io.in(data.room).emit('show judging', roomRoster[data.room]);
+			}
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
@@ -234,11 +244,6 @@ io.sockets.on('connection', function(socket){
             socket.emit('MoreData', { 'Place' : Place, 'Percent' :  Percent});
         }
     });
-
-  	//bounce
-  	socket.on('show judging', function(data){
-  		io.in(data).emit('show judging', roomRoster[data]);
-  	});
 
   	socket.on('open submission', function(data){
 		ChangeJudge(data);

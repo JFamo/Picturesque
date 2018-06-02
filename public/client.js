@@ -87,7 +87,6 @@ $('#chooseWinnerForm').submit(function(){
 
 $('#submissionForm').submit(function(){
 	StartUpload();
-	//socket.emit('show judging', $('#roomHeader').text());
 	return false;
 });
 
