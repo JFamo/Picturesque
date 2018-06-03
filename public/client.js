@@ -133,6 +133,16 @@ socket.on('show judging', function(data){
 	$('#judgeName').text(judgeName + " is judging...");
 });
 
+socket.on('show submissions', function(data){
+	$('#picDisplays').text("");
+	for(var i = 0; i < data.length; i ++){
+		if($('#judgeName').text().replace(' is judging...','') != data[i].name){
+			$('#picDisplays').append($('<p>').text(data[i].name));
+    		var thisImg = $('#picDisplays').append($('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}));
+    	}
+	}
+});
+
 socket.on('show winner', function(data){
 	$('#judging').css('display','none');
 	$('#winner').css('display','block');
@@ -156,7 +166,7 @@ socket.on('show score', function(data){
 
 socket.on('winner path', function(data){
 	var img = document.getElementById('winnerImage');
-	img.setAttribute('src', "http://localhost:8080/Images/" + data);
+	img.setAttribute('src', Path + "Images/" + data);
 });
 
 socket.on('MoreData', function (data){

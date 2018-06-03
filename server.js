@@ -134,7 +134,7 @@ io.sockets.on('connection', function(socket){
   			roomRoster[thisRoom].push(mydeets);
   		}
   		//same thing for room submissions
-  		mydeets = {id:socket.id, submission:null};
+  		mydeets = {id:socket.id, submission:null, name:data.name};
   		if(roomSubmissions.hasOwnProperty(thisRoom)){
   			(roomSubmissions[thisRoom]).push(mydeets);
   		}
@@ -224,6 +224,7 @@ io.sockets.on('connection', function(socket){
 			}
 			if(!missingSubmission){
 				io.in(data.room).emit('show judging', roomRoster[data.room]);
+				io.in(data.room).emit('show submissions', roomSubmissions[data.room]);
 			}
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
