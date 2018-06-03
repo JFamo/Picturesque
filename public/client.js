@@ -137,16 +137,15 @@ socket.on('show submissions', function(data){
 			thisForm.css('class','chooseWinnerForm');
 			var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
 			thisButton.text("Choose Winner");
-			var thisInput = $('<input>').attr({ 'type':'text' }).appendTo(thisForm);
+			var thisInput = $('<input>').attr({ 'type':'text', 'name':'submitID' }).appendTo(thisForm);
 			thisInput.css('display','none');
+			thisInput.val(data[i].id);
     	}
 	}
 	$('.chooseWinnerForm').submit(function(){
-		window.alert("CHOOSE WINNER");
 		var send = {};
 		send.room = $('#roomHeader').text();
-		send.id = $( "input:first" ).val();
-		window.alert(send.id);
+		send.id = this.elements['submitID'].value;
 		socket.emit('show winner', send);
 		return false;
 	});
