@@ -71,11 +71,11 @@ $('#startRoomForm').submit(function(){
 	return false;
 });
 
-$('#chooseWinnerForm').submit(function(){
+$('.chooseWinnerForm').submit(function(){
 	var send = {};
 	send.room = $('#roomHeader').text();
 	send.name = $('#nameHeader').text();
-	send.id = socket.id;
+	send.id = this.lastChild.value;
 	socket.emit('show winner', send);
 	return false;
 });
@@ -137,8 +137,17 @@ socket.on('show submissions', function(data){
 	$('#picDisplays').text("");
 	for(var i = 0; i < data.length; i ++){
 		if($('#judgeName').text().replace(' is judging...','') != data[i].name){
-			$('#picDisplays').append($('<p>').text(data[i].name));
-    		var thisImg = $('#picDisplays').append($('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}));
+			var thisRow = $('<div>').attr('class','row').appendTo($('#picDisplays'));
+			var col1 = $('<div>').attr('class','col-6').appendTo(thisRow);
+			var col2 = $('<div>').attr('class','col-6').appendTo(thisRow);
+			$('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}).appendTo(col1);
+			var thisForm = $('<form>').attr('class','chooseWinnerForm').appendTo(col2);
+			thisForm.css('padding-top','40%');
+			thisForm.css('class','chooseWinnerForm')
+			var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
+			thisButton.text("Choose Winner");
+			var thisInput = $('<input>').attr({ 'type':'text', 'id':'submitID' }).appendTo(thisForm);
+			thisInput.css('display','none');
     	}
 	}
 });
