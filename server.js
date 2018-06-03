@@ -56,7 +56,12 @@ function ChangeJudge(data){
 //data is the room name
 function ShowScore(data){
 	io.in(data).emit('show score', roomRoster[data]);
-	rmDir("Images", false);
+	//rmDir("Images", false);
+	for(var r in roomSubmissions){
+		for(var p = 0; p < roomSubmissions[r].length; p ++){
+			(roomSubmissions[r])[p].submission = null;
+		}
+	}
   	setTimeout(function () {
         ChangeJudge(data);
         io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
@@ -85,11 +90,11 @@ function rmDir(dirPath, removeSelf) {
 //socket io functions
 io.sockets.on('connection', function(socket){
 
-	console.log('CNCT:'+socket.id);
+	console.log('CNCT:'+socket.id);		//Ethan Witherington 2017
 
   	//When the client disconnects
   	socket.on('disconnect', function(){
-    	console.log('DSCT:' + socket.id);
+    	console.log('DSCT:' + socket.id);	//Ethan Witherington 2017
     	var room = "";
     	var name = "";
     	//find the ID in the room roster matching the disconnecting ID
@@ -153,27 +158,10 @@ io.sockets.on('connection', function(socket){
 		var winnerImagePath;
 		for(var p = 0; p < roomSubmissions[data.room].length; p ++){
 			if((roomSubmissions[data.room])[p].id == data.id){
-				winnerImagePath = "./Images/" + (roomSubmissions[data.room])[p].submission;
+				winnerImagePath = (roomSubmissions[data.room])[p].submission;
 			}
 		}
-		//grab and send winner image
-		var readStream = fs.createReadStream(path.resolve(__dirname, winnerImagePath), {
-			encoding: 'binary'
-		}), chunks = [];
-
-		readStream.on('readable', function(chunk){
-			console.log("Image loading");
-		});
-
-		readStream.on('data', function(chunk){
-			chunks.push(chunk);
-			io.in(data.room).emit('img-chunk', chunk);
-		});
-
-		readStream.on('end', function(chunk){
-			console.log("Image loaded");
-		});
-
+		io.in(data.room).emit('winner path', winnerImagePath);
   		io.in(data.room).emit('show winner', data.name);
   		setTimeout(function(){
   			ShowScore(data.room);

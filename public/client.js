@@ -154,10 +154,9 @@ socket.on('show score', function(data){
 	}
 });
 
-socket.on('img-chunk', function(chunk){
+socket.on('winner path', function(data){
 	var img = document.getElementById('winnerImage');
-	imgChunks.push(chunk);
-	img.setAttribute('src', 'data:image/jpeg;base64,' + window.btoa(imgChunks));
+	img.setAttribute('src', "http://localhost:8080/Images/" + data);
 });
 
 socket.on('MoreData', function (data){
