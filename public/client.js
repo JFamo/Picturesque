@@ -23,6 +23,7 @@ var SelectedFile;
 var FReader;
 var fileName;
 var Path = "http://localhost:8080/";
+var amIJudging = false;
 
 //start user login modal
 $('#nameModal').modal();
@@ -119,6 +120,12 @@ socket.on('show judging', function(data){
 	for(var i = 0; i < data.length; i ++){
     	if(data[i].judging){
     		judgeName = data[i].name;
+    		if(data[i].id == socket.id){
+    			amIJudging = true;
+    		}
+    		else{
+    			amIJudging = false;
+    		}
     	}
 	}
 	$('#judgeName').text(judgeName + " is judging...");
@@ -132,14 +139,16 @@ socket.on('show submissions', function(data){
 			var col1 = $('<div>').attr('class','col-6').appendTo(thisRow);
 			var col2 = $('<div>').attr('class','col-6').appendTo(thisRow);
 			$('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}).appendTo(col1);
-			var thisForm = $('<form>').attr('class','chooseWinnerForm').appendTo(col2);
-			thisForm.css('padding-top','40%');
-			thisForm.css('class','chooseWinnerForm');
-			var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
-			thisButton.text("Choose Winner");
-			var thisInput = $('<input>').attr({ 'type':'text', 'name':'submitID' }).appendTo(thisForm);
-			thisInput.css('display','none');
-			thisInput.val(data[i].id);
+			if(amIJudging){
+				var thisForm = $('<form>').attr('class','chooseWinnerForm').appendTo(col2);
+				thisForm.css('padding-top','40%');
+				thisForm.css('class','chooseWinnerForm');
+				var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
+				thisButton.text("Choose Winner");
+				var thisInput = $('<input>').attr({ 'type':'text', 'name':'submitID' }).appendTo(thisForm);
+				thisInput.css('display','none');
+				thisInput.val(data[i].id);
+			}
     	}
 	}
 	$('.chooseWinnerForm').submit(function(){
