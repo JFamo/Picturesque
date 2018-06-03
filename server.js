@@ -148,10 +148,12 @@ io.sockets.on('connection', function(socket){
   	});
 
   	socket.on('show winner', function(data){
+  		var winnerName;
   		//find the person whose name is the winner, give them a point
   		for(var p = 0; p < roomRoster[data.room].length; p ++){
 			if((roomRoster[data.room])[p].id == data.id){
 				(roomRoster[data.room])[p].points += 1;
+				winnerName = (roomRoster[data.room])[p].name;
 			}
 		}
 		//find the image name of the winner
@@ -162,7 +164,7 @@ io.sockets.on('connection', function(socket){
 			}
 		}
 		io.in(data.room).emit('winner path', winnerImagePath);
-  		io.in(data.room).emit('show winner', data.name);
+  		io.in(data.room).emit('show winner', winnerName);
   		setTimeout(function(){
   			ShowScore(data.room);
   		}, 5000);
