@@ -46,7 +46,7 @@ function StartUpload(){
         fileName = document.getElementById('fileNameInput').value;
         FReader.onload = function(evnt){
         	var send = { 'Name' : fileName, Data : evnt.target.result };
-        	send.room = send.room = $('#roomInput').val();
+        	send.room = $('#roomInput').val();
             socket.emit('file upload', send);
         }
         socket.emit('file start', { 'Name' : fileName, 'Size' : SelectedFile.size });

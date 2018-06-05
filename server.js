@@ -1,7 +1,7 @@
 var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http, {'pingInterval':1000, 'pingTimeout':3000});
 var fs = require("fs");
 var path = require("path");
 
@@ -98,8 +98,8 @@ io.sockets.on('connection', function(socket){
   	});
 
   	//When the client disconnects
-  	socket.on('disconnect', function(){
-    	console.log('DSCT:' + socket.id);	//Ethan Witherington 2017
+  	socket.on('disconnect', function(reason){
+    	console.log('DSCT:' + socket.id + " for " + reason);	//Ethan Witherington 2017
     	var room = "";
     	var name = "";
     	//find the ID in the room roster matching the disconnecting ID
