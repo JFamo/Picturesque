@@ -137,24 +137,28 @@ socket.on('show judging', function(data){
 });
 
 socket.on('show submissions', function(data){
+	//remove the judge from the submissions tracking, which is in data
+	for(var p = 0; p < data.length; p ++){
+		if(data[p].submission == null){
+			data.splice(p, 1);
+		}
+	}
 	$('#picDisplays').text("");
 	for(var i = 0; i < data.length; i ++){
-		if($('#judgeName').text().replace(' is judging...','') != data[i].name){
-			var thisRow = $('<div>').attr('class','row').appendTo($('#picDisplays'));
-			var col1 = $('<div>').attr('class','col-6').appendTo(thisRow);
-			var col2 = $('<div>').attr('class','col-6').appendTo(thisRow);
-			$('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}).appendTo(col1);
-			if(amIJudging){
-				var thisForm = $('<form>').attr('class','chooseWinnerForm').appendTo(col2);
-				thisForm.css('padding-top','40%');
-				thisForm.css('class','chooseWinnerForm');
-				var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
-				thisButton.text("Choose Winner");
-				var thisInput = $('<input>').attr({ 'type':'text', 'name':'submitID' }).appendTo(thisForm);
-				thisInput.css('display','none');
-				thisInput.val(data[i].id);
-			}
-    	}
+		var thisRow = $('<div>').attr('class','row').appendTo($('#picDisplays'));
+		var col1 = $('<div>').attr('class','col-6').appendTo(thisRow);
+		var col2 = $('<div>').attr('class','col-6').appendTo(thisRow);
+		$('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}).appendTo(col1);
+		if(amIJudging){
+			var thisForm = $('<form>').attr('class','chooseWinnerForm').appendTo(col2);
+			thisForm.css('padding-top','40%');
+			thisForm.css('class','chooseWinnerForm');
+			var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
+			thisButton.text("Choose Winner");
+			var thisInput = $('<input>').attr({ 'type':'text', 'name':'submitID' }).appendTo(thisForm);
+			thisInput.css('display','none');
+			thisInput.val(data[i].id);
+		}
 	}
 	$('.chooseWinnerForm').submit(function(){
 		var send = {};
