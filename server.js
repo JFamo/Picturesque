@@ -92,6 +92,11 @@ io.sockets.on('connection', function(socket){
 
 	console.log('CNCT:'+socket.id);		//Ethan Witherington 2017
 
+	//When the client reconnects
+  	socket.on('reconnect', function(){
+    	console.log('RCNT:' + socket.id);	//Joshua Famous 2018
+  	});
+
   	//When the client disconnects
   	socket.on('disconnect', function(){
     	console.log('DSCT:' + socket.id);	//Ethan Witherington 2017

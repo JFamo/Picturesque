@@ -13,17 +13,22 @@ function Ready(){
     }
 }
 
-//connect
-var socket = io.connect();
-
 //USER VARIABLES
 var username = "DefaultUser";
 var imgChunks = [];
 var SelectedFile;
 var FReader;
 var fileName;
-var Path = "http://localhost:8080/";
+var Path = "http://192.168.1.91:8080/";
 var amIJudging = false;
+
+//connect
+var socket = io.connect(Path, {
+	reconnection: true,
+	reconnectionDelay: 1000,
+	reconnectionDelayMax: 5000,
+	reconnectionAttempts: 99999
+});
 
 //start user login modal
 $('#nameModal').modal();
