@@ -7,8 +7,21 @@ var path = require("path");
 
 //track people in rooms
 var roomRoster = {};		//contains names, ids, judging
-var roomProgress = {};		//contains states of rooms
+		//id (string)
+		//name (string)
+		//points (int)
+		//judging	(bool)
 var roomSubmissions = {};	//associates users with pictures they submitted
+		//submission (string, file path)
+		//id (string)
+		//name (string)
+var roomProgress = {};		//contains states of rooms
+		//-1 = waiting room
+		// 0 = starting
+		// 1 = submissions
+		// 2 = judging
+		// 3 = winner
+		// 4 = scoreboard
 
 //give clients public folder, for css and js
 app.use(express.static('public'));
@@ -123,6 +136,7 @@ io.sockets.on('connection', function(socket){
     	socket.to(room).emit('user left', name);
   	});
 
+  	//when the client joins a room, potential room initialization
   	socket.on('join room', function(data){
   		//join the room, create my details object
   		var thisRoom = data.room;
@@ -148,10 +162,15 @@ io.sockets.on('connection', function(socket){
   			roomSubmissions[thisRoom] = [];
   			(roomSubmissions[thisRoom]).push(mydeets);
   		}
+  		//also add room to tracking room progress
+  		if(!roomProgress.hasOwnProperty(thisRoom)){
+  			(roomProgress[thisRoom]) = -1;
+  		}
   		socket.emit('room roster', roomRoster[thisRoom]);
   		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 
+  	//broadcast winner and their image, add timeout to score
   	socket.on('show winner', function(data){
   		var winnerName;
   		//find the person whose name is the winner, give them a point
@@ -175,6 +194,7 @@ io.sockets.on('connection', function(socket){
   		}, 5000);
   	});
 
+  	//when a user begins uploading a file
   	socket.on('file start', function (data) { 
         var Name = data['Name'];
         Files[Name] = {
@@ -205,6 +225,7 @@ io.sockets.on('connection', function(socket){
         });
 	});
 
+  	//each chunk of an image upload
 	socket.on('file upload', function (data){
         var Name = data['Name'];
         Files[Name]['Downloaded'] += data['Data'].length;
@@ -250,6 +271,7 @@ io.sockets.on('connection', function(socket){
         }
     });
 
+	//advance game, open image submission
   	socket.on('open submission', function(data){
 		ChangeJudge(data);
 		io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
@@ -263,6 +285,7 @@ io.sockets.on('connection', function(socket){
 
   	//bounce
   	socket.on('room start', function(data){
+  		roomProgress[data] = 0;
   		io.in(data).emit('room start', data);
   	});
 
