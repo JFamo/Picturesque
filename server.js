@@ -75,10 +75,12 @@ function ShowScore(data){
 			(roomSubmissions[r])[p].submission = null;
 		}
 	}
+	roomProgress[data] = 4;
   	setTimeout(function () {
         ChangeJudge(data);
         io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
 		io.in(data).emit('open submission', roomRoster[data]);
+		roomProgress[data] = 1;
     }, 5000);
 }
 
@@ -138,36 +140,42 @@ io.sockets.on('connection', function(socket){
 
   	//when the client joins a room, potential room initialization
   	socket.on('join room', function(data){
-  		//join the room, create my details object
   		var thisRoom = data.room;
-  		socket.join(thisRoom);
-  		var mydeets = {name:data.name, id:socket.id, points:0, judging:false};
-  		//if the room exists, add me
-  		if(roomRoster.hasOwnProperty(thisRoom)){
-  			roomRoster[thisRoom].push(mydeets);
+  		if(roomProgress[thisRoom] > 1){
+  			socket.emit('join fail', thisRoom);
   		}
-  		//if the room does not exist, initialize it
   		else{
-  			roomRoster[thisRoom] = [];
-  			mydeets.judging = true;		//I am the first one in the room, so I have to be a judge
-  			roomRoster[thisRoom].push(mydeets);
+	  		//join the room, create my details object
+	  		socket.join(thisRoom);
+	  		var mydeets = {name:data.name, id:socket.id, points:0, judging:false};
+	  		//if the room exists, add me
+	  		if(roomRoster.hasOwnProperty(thisRoom)){
+	  			roomRoster[thisRoom].push(mydeets);
+	  		}
+	  		//if the room does not exist, initialize it
+	  		else{
+	  			roomRoster[thisRoom] = [];
+	  			mydeets.judging = true;		//I am the first one in the room, so I have to be a judge
+	  			roomRoster[thisRoom].push(mydeets);
+	  		}
+	  		//same thing for room submissions
+	  		mydeets = {id:socket.id, submission:null, name:data.name};
+	  		if(roomSubmissions.hasOwnProperty(thisRoom)){
+	  			(roomSubmissions[thisRoom]).push(mydeets);
+	  		}
+	  		//if the room does not exist, initialize it
+	  		else{
+	  			roomSubmissions[thisRoom] = [];
+	  			(roomSubmissions[thisRoom]).push(mydeets);
+	  		}
+	  		//also add room to tracking room progress
+	  		if(!roomProgress.hasOwnProperty(thisRoom)){
+	  			(roomProgress[thisRoom]) = -1;
+	  		}
+	  		socket.emit('join success', thisRoom);
+	  		socket.emit('room roster', roomRoster[thisRoom]);
+	  		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   		}
-  		//same thing for room submissions
-  		mydeets = {id:socket.id, submission:null, name:data.name};
-  		if(roomSubmissions.hasOwnProperty(thisRoom)){
-  			(roomSubmissions[thisRoom]).push(mydeets);
-  		}
-  		//if the room does not exist, initialize it
-  		else{
-  			roomSubmissions[thisRoom] = [];
-  			(roomSubmissions[thisRoom]).push(mydeets);
-  		}
-  		//also add room to tracking room progress
-  		if(!roomProgress.hasOwnProperty(thisRoom)){
-  			(roomProgress[thisRoom]) = -1;
-  		}
-  		socket.emit('room roster', roomRoster[thisRoom]);
-  		console.log('Socket ' + socket.id + ' joined room ' + thisRoom);
   	});
 
   	//broadcast winner and their image, add timeout to score
@@ -189,6 +197,7 @@ io.sockets.on('connection', function(socket){
 		}
 		io.in(data.room).emit('winner path', winnerImagePath);
   		io.in(data.room).emit('show winner', winnerName);
+  		roomProgress[data.room] = 3;
   		setTimeout(function(){
   			ShowScore(data.room);
   		}, 5000);
@@ -253,6 +262,7 @@ io.sockets.on('connection', function(socket){
 			if(!missingSubmission){
 				io.in(data.room).emit('show judging', roomRoster[data.room]);
 				io.in(data.room).emit('show submissions', roomSubmissions[data.room]);
+				roomProgress[data.room] = 2;
 			}
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
@@ -276,6 +286,7 @@ io.sockets.on('connection', function(socket){
 		ChangeJudge(data);
 		io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
 		io.in(data).emit('open submission', roomRoster[data]);
+		roomProgress[data] = 1;
 	});
 
   	//bounce

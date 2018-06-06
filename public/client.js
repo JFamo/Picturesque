@@ -67,8 +67,6 @@ $('#nameForm').submit(function(){
 	$('#roomHeader').text(send.room);
 	$('#nameHeader').text(send.name);
 	socket.emit('join room', send);
-	socket.emit('user joined', send);
-	$('#nameModal').modal('hide');
 	return false;
 });
 
@@ -91,6 +89,20 @@ socket.on('user joined', function(data){
 socket.on('user left', function(data){
     $("li").filter(":contains('" + data + "')").first().remove();
 });
+
+socket.on('join fail', function(data){
+  	window.alert("Failed to join room! Room is in the middle of a game!");
+});
+
+
+socket.on('join success', function(data){
+	$('#nameModal').modal('hide');
+	var send = {};
+	send.room = data;
+	send.name = $('#nameHeader').val();
+    socket.emit('user joined', send);
+});
+
 
 socket.on('room roster', function(data){
 	for(var i = 0; i < data.length; i ++){
