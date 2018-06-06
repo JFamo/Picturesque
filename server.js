@@ -134,7 +134,14 @@ io.sockets.on('connection', function(socket){
     				}
     				name = (roomRoster[r])[p].name;
     				roomRoster[r].splice(p, 1);
-    				room = r + "";
+    				room = r;
+    				//check if there is now only one player left
+    				if(roomRoster[room].length <= 1){
+    					socket.emit('end game', room);
+    					roomRoster[room] = [];
+    					roomProgress[room] = -1;
+    					roomSubmissions[room] = [];
+    				}
     			}
     		}
     	}

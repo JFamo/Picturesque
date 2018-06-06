@@ -219,3 +219,8 @@ socket.on('image done', function(data){
 	document.getElementById('fileNameInput').value = "";
 	document.getElementById('fileUpload').value = "";
 });
+
+socket.on('end game', function(data){
+	window.alert("All other players have left. Ending game.");
+	location.reload();
+});
