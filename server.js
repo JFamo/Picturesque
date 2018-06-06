@@ -137,7 +137,7 @@ io.sockets.on('connection', function(socket){
     				room = r;
     				//check if there is now only one player left
     				if(roomRoster[room].length <= 1){
-    					socket.emit('end game', room);
+    					socket.to(room).emit('end game', room);
     					roomRoster[room] = [];
     					roomProgress[room] = -1;
     					roomSubmissions[room] = [];

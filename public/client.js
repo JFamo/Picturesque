@@ -99,7 +99,7 @@ socket.on('join success', function(data){
 	$('#nameModal').modal('hide');
 	var send = {};
 	send.room = data;
-	send.name = $('#nameHeader').val();
+	send.name = $('#nameHeader').text();
     socket.emit('user joined', send);
 });
 
