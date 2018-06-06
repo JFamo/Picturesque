@@ -102,6 +102,13 @@ function rmDir(dirPath, removeSelf) {
         fs.rmdirSync(dirPath);
     };
 
+//shows judging and submissions
+function showJudgingAndSubmissions(rm){
+	io.in(rm).emit('show judging', roomRoster[rm]);
+	io.in(rm).emit('show submissions', roomSubmissions[rm]);
+	roomProgress[rm] = 2;
+}
+
 //socket io functions
 io.sockets.on('connection', function(socket){
 
@@ -121,6 +128,10 @@ io.sockets.on('connection', function(socket){
     	for(var r in roomRoster){
     		for(var p = 0; p < roomRoster[r].length; p ++){
     			if((roomRoster[r])[p].id == socket.id){
+    				if((roomRoster[r])[p].judging){
+    					ChangeJudge(r);
+    					showJudgingAndSubmissions(r);
+    				}
     				name = (roomRoster[r])[p].name;
     				roomRoster[r].splice(p, 1);
     				room = r + "";
@@ -260,9 +271,7 @@ io.sockets.on('connection', function(socket){
 				}
 			}
 			if(!missingSubmission){
-				io.in(data.room).emit('show judging', roomRoster[data.room]);
-				io.in(data.room).emit('show submissions', roomSubmissions[data.room]);
-				roomProgress[data.room] = 2;
+				showJudgingAndSubmissions(data.room);
 			}
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
