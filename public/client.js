@@ -224,8 +224,11 @@ socket.on('image done', function(data){
 });
 
 socket.on('terminate game', function(data){
-	window.alert("All other players have left. Ending game.");
-	location.reload();
+	$('#judging').css('display','none');
+	$('#scoreboard').css('display','none');
+	$('#winner').css('display','none');
+	$('#submission').css('display','none');
+	$('#gameTerminating').css('display','block');
 });
 
 socket.on('win game', function(data){
