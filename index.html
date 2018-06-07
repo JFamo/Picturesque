@@ -12,16 +12,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Londrina+Solid" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./styles.css">
   </head>
 
   <body>
-    <div class="container-fluid" id="containerObj">
-      <nav class="navbar navbar-light bg-light">
-        <span style="float:left;" id="roomHeader" class="navbar-brand mb-0 h1">Room</span>
-        <span style="float:right;" id="nameHeader" class="navbar-brand mb-0 h1">Name</span>
-      </nav>
-      <div class="row">
+    <div class="container-fluid" d="containerObj">
+      <div style="position:absolute; display:inline-block; padding-top:10px; padding-left:10px;">
+            <img style="float:left;" src="logo.PNG" width="123px" height="32.5px"/>
+            <p style="padding-left:15%; font-size: 14px; font-family: 'Londrina Solid', cursive; float;left; margin-bottom:2px;" class="text-primary" id="roomHeader">Room</p>
+            <p style="padding-left:15%; font-size: 14px; font-family: 'Londrina Solid', cursive; float;left; margin-top:2px;" id="nameHeader">Name</p>
+      </div>
+      <div class="row" style="padding-top:75px;">
         <div class="col-12" style="padding-top:2%;">
           <div class="modal" tabindex="-1" role="dialog" id="nameModal">
             <div class="modal-dialog" role="document">

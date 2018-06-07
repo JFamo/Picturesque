@@ -1,3 +1,7 @@
+*{
+	font-family: 'Londrina Solid', cursive;
+}
+
 body { font: 13px Helvetica, Arial; }
 
 .entryMessage{
@@ -12,3 +16,4 @@ body { font: 13px Helvetica, Arial; }
 	padding-top:5%;
 	padding-bottom:5%;
 }
+
