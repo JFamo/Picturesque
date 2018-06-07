@@ -163,10 +163,13 @@ socket.on('show submissions', function(data){
 		$('<img>').attr({ src: Path + "Images/" + data[i].submission, width: '80%'}).appendTo(col1);
 		if(amIJudging){
 			var thisForm = $('<form>').attr('class','chooseWinnerForm').appendTo(col2);
-			thisForm.css('padding-top','40%');
+			thisForm.css('height','100%');
+			thisForm.css('display','flex');
+			thisForm.css('align-items','center');
 			thisForm.css('class','chooseWinnerForm');
-			var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-primary' }).appendTo(thisForm);
+			var thisButton = $('<button>').attr({ 'type':'submit', 'class':'btn btn-danger' }).appendTo(thisForm);
 			thisButton.text("Choose Winner");
+			//thisButton.css('display','flex');
 			var thisInput = $('<input>').attr({ 'type':'text', 'name':'submitID' }).appendTo(thisForm);
 			thisInput.css('display','none');
 			thisInput.val(data[i].id);
