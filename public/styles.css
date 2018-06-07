@@ -19,6 +19,7 @@ body { font: 13px Helvetica, Arial; }
 
 .nameSubtitle{
 	font-size:12px;
+	margin-bottom:0px;
 }
 
 .constantText{
