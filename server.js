@@ -70,20 +70,32 @@ function ChangeJudge(data){
 //shows the scoreboard and returns to submission after 5 secs
 //data is the room name
 function ShowScore(data){
-	io.in(data).emit('show score', roomRoster[data]);
-	//rmDir("Images", false);
-	for(var r in roomSubmissions){
-		for(var p = 0; p < roomSubmissions[r].length; p ++){
-			(roomSubmissions[r])[p].submission = null;
+	//first check for winner
+	var haveWinner = false;
+	for(var i = 0; i < roomRoster[data].length; i ++){
+		if((roomRoster[data])[i].points >= 2){
+			haveWinner = true;
+			io.in(data).emit('win game', (roomRoster[data])[i].name);
+			purgeRoom(data);
 		}
 	}
-	roomProgress[data] = 4;
-  	setTimeout(function () {
-        ChangeJudge(data);
-        io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
-		io.in(data).emit('open submission', roomRoster[data]);
-		roomProgress[data] = 1;
-    }, 5000);
+	//if I have no winner, keep game going
+	if(!haveWinner){
+		io.in(data).emit('show score', roomRoster[data]);
+		//rmDir("Images", false);
+		for(var r in roomSubmissions){
+			for(var p = 0; p < roomSubmissions[r].length; p ++){
+				(roomSubmissions[r])[p].submission = null;
+			}
+		}
+		roomProgress[data] = 4;
+	  	setTimeout(function () {
+	        ChangeJudge(data);
+	        io.in(data).emit('prompt', prompts[Math.floor(Math.random()*prompts.length)]);
+			io.in(data).emit('open submission', roomRoster[data]);
+			roomProgress[data] = 1;
+	    }, 5000);
+  	}
 }
 
 //clears the Images folder
@@ -126,6 +138,13 @@ function checkSubmissions(rm){
 	}
 }
 
+//reset a room's stats
+function purgeRoom(room){
+	roomRoster[room] = [];
+	roomProgress[room] = -1;
+	roomSubmissions[room] = [];
+}
+
 //socket io functions
 io.sockets.on('connection', function(socket){
 
@@ -155,10 +174,8 @@ io.sockets.on('connection', function(socket){
     				room = r;
     				//check if there is now only one player left
     				if(roomRoster[room].length <= 1){
-    					socket.to(room).emit('end game', room);
-    					roomRoster[room] = [];
-    					roomProgress[room] = -1;
-    					roomSubmissions[room] = [];
+    					socket.to(room).emit('terminate game', room);
+    					purgeRoom(room);
     				}
     			}
     		}

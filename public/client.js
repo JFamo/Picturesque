@@ -223,7 +223,13 @@ socket.on('image done', function(data){
 	document.getElementById('fileUpload').value = "";
 });
 
-socket.on('end game', function(data){
+socket.on('terminate game', function(data){
 	window.alert("All other players have left. Ending game.");
 	location.reload();
+});
+
+socket.on('win game', function(data){
+	$('#winner').css('display','none');
+	$('#gameWinner').css('display','block');
+	$('#gameWinnerName').text(data);
 });
