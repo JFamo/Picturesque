@@ -31,7 +31,7 @@ var socket = io.connect(Path, {
 });
 
 //start user login modal
-$('#nameModal').modal();
+$('#nameModal').modal({backdrop: 'static', keyboard: false});
 
 //GENERAL FUNCTIONS
 function FileChosen(evnt) {

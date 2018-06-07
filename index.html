@@ -20,7 +20,7 @@
     <div class="container-fluid" d="containerObj">
       <div style="position:absolute; display:inline-block; padding-top:10px; padding-left:10px;">
             <img style="float:left;" src="logo.PNG" width="123px" height="32.5px"/>
-            <p style="padding-left:15%; font-size: 14px; font-family: 'Londrina Solid', cursive; float;left; margin-bottom:2px;" class="text-primary" id="roomHeader">Room</p>
+            <p style="padding-left:15%; font-size: 14px; font-family: 'Londrina Solid', cursive; float;left; margin-bottom:2px;" class="text-danger" id="roomHeader">Room</p>
             <p style="padding-left:15%; font-size: 14px; font-family: 'Londrina Solid', cursive; float;left; margin-top:2px;" id="nameHeader">Name</p>
       </div>
       <div class="row" style="padding-top:75px;">
@@ -30,9 +30,6 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">Welcome!</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                 </div>
                 <div class="modal-body">
                   <form id="nameForm">
@@ -45,7 +42,7 @@
                       <input type="text" class="form-control" id="roomInput" aria-describedby="roomHelp" placeholder="game">
                       <small id="roomHelp" class="form-text text-muted">This is the name of the room you will either create or join.</small>
                     </div>
-                    <button type="submit" class="btn btn-primary">Join Room</button>
+                    <button type="submit" class="btn btn-danger">Join Room</button>
                   </form>
                 </div>
               </div>
@@ -56,7 +53,7 @@
               <h3>Players in this Room</h3>
               <ul id="namesList" style="padding-bottom:20px; padding-left:0px; list-style-type:none; margin:0px;"></ul>
               <form id="startRoomForm">
-                <button type="submit" class="btn btn-primary">Start Game</button>
+                <button type="submit" class="btn btn-danger">Start Game</button>
               </form>
             </center>
           </div>
@@ -64,12 +61,12 @@
             <center>
               <h3>Submission</h3>
               <h6 id="submissionCaption">Submit a photo that best represents the prompt below.</h6>
-              <h4 style="padding-top:10px; padding-bottom:10px;" class="text-primary" id="prompt"></h4>
+              <h4 style="padding-top:10px; padding-bottom:10px;" class="text-danger" id="prompt"></h4>
               <form id="submissionForm">
                 <div class="form-group">
                   <input type="file" class="form-control-file" id="fileUpload" accept="image/*">
                   <input type="text" id="fileNameInput" style="display:none;"/>
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-danger">Submit</button>
                 </div>
               </form>
               <img id="submissionImage" src="" width="80%"/>
