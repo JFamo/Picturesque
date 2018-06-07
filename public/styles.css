@@ -17,3 +17,13 @@ body { font: 13px Helvetica, Arial; }
 	padding-bottom:5%;
 }
 
+.nameSubtitle{
+	font-size:12px;
+}
+
+.constantText{
+	padding-left:15%; 
+	font-size: 14px; 
+	font-family: 'Londrina Solid', cursive; float;left; 
+	margin-bottom:2px;
+}
