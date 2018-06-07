@@ -109,6 +109,21 @@ function showJudgingAndSubmissions(rm){
 	roomProgress[rm] = 2;
 }
 
+//check if everyone has submitted something, if so advance the game
+function checkSubmissions(rm){
+    var missingSubmission = false;
+    for(var p = 0; p < roomSubmissions[rm].length; p ++){
+		if((roomSubmissions[rm])[p].submission == null){
+			if((roomRoster[rm])[p].judging == false){
+				missingSubmission = true;
+			}
+		}
+	}
+	if(!missingSubmission){
+		showJudgingAndSubmissions(rm);
+	}
+}
+
 //socket io functions
 io.sockets.on('connection', function(socket){
 
@@ -128,6 +143,7 @@ io.sockets.on('connection', function(socket){
     	for(var r in roomRoster){
     		for(var p = 0; p < roomRoster[r].length; p ++){
     			if((roomRoster[r])[p].id == socket.id){
+    				//if the judge left, pick a new judge
     				if((roomRoster[r])[p].judging){
     					ChangeJudge(r);
     					showJudgingAndSubmissions(r);
@@ -145,7 +161,7 @@ io.sockets.on('connection', function(socket){
     			}
     		}
     	}
-    	//remove my record from the submissions tracking
+    	//remove my record from the submissions tracking, do this before I check submissions later
     	for(var r in roomSubmissions){
     		for(var p = 0; p < roomSubmissions[r].length; p ++){
     			if((roomSubmissions[r])[p].id == socket.id){
@@ -153,6 +169,10 @@ io.sockets.on('connection', function(socket){
     			}
     		}
     	}
+    	//if I am submitting and I get kicked or leave, don't wait for my submission
+		if(roomProgress[room] == 1){
+			checkSubmissions(room);
+		}
     	socket.to(room).emit('user left', name);
   	});
 
@@ -268,18 +288,7 @@ io.sockets.on('connection', function(socket){
 					(roomSubmissions[data.room])[p].submission = Name;
 				}
 			}
-            //check if everyone has submitted something
-            var missingSubmission = false;
-            for(var p = 0; p < roomSubmissions[data.room].length; p ++){
-				if((roomSubmissions[data.room])[p].submission == null){
-					if((roomRoster[data.room])[p].judging == false){
-						missingSubmission = true;
-					}
-				}
-			}
-			if(!missingSubmission){
-				showJudgingAndSubmissions(data.room);
-			}
+            checkSubmissions();
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
