@@ -43,25 +43,27 @@ var Files = {};
 //data is the room name
 function ChangeJudge(data){
 	//find the current judge, make them not judging
-	var hasJudge = false;
-	for(var p = 0; p < roomRoster[data].length; p ++){
-	if((roomRoster[data])[p].judging){
-		(roomRoster[data])[p].judging = false;
-		hasJudge = true;
-		//if at end of list, go back to start
-		if(p == roomRoster[data].length - 1){
-			(roomRoster[data])[0].judging = true;
-			break;
-		}
-		//else make next person the judge
-		else{
-			(roomRoster[data])[p + 1].judging = true;
-			break;
+	if(roomRoster[data].length > 0){
+		var hasJudge = false;
+		for(var p = 0; p < roomRoster[data].length; p ++){
+			if((roomRoster[data])[p].judging){
+				(roomRoster[data])[p].judging = false;
+				hasJudge = true;
+				//if at end of list, go back to start
+				if(p == roomRoster[data].length - 1){
+					(roomRoster[data])[0].judging = true;
+					break;
+				}
+				//else make next person the judge
+				else{
+					(roomRoster[data])[p + 1].judging = true;
+					break;
+				}
 			}
+		}	
+		if(!hasJudge){
+			(roomRoster[data])[0].judging = true;
 		}
-	}	
-	if(!hasJudge){
-		(roomRoster[data])[0].judging = true;
 	}
 }
 
@@ -288,7 +290,7 @@ io.sockets.on('connection', function(socket){
 					(roomSubmissions[data.room])[p].submission = Name;
 				}
 			}
-            checkSubmissions();
+            checkSubmissions(data.room);
         }
         else if(Files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
             fs.write(Files[Name]['Handler'], Files[Name]['Data'], null, 'Binary', function(err, Writen){
