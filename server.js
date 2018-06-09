@@ -82,6 +82,7 @@ function ShowScore(data){
 	}
 	//if I have no winner, keep game going
 	if(!haveWinner){
+		io.in(data).emit('show ptw', roomPoints[data]);
 		io.in(data).emit('show score', roomRoster[data]);
 		//rmDir("Images", false);
 		for(var r in roomSubmissions){

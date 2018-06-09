@@ -195,6 +195,10 @@ socket.on('prompt', function(data){
 	$('#prompt').text(data);
 });
 
+socket.on('show ptw', function(data){
+	$('#ptw').text(data);
+});
+
 socket.on('show score', function(data){
 	$('#scoreList').text("");
 	$('#winner').css('display','none');
