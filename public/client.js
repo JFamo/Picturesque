@@ -64,6 +64,7 @@ $('#nameForm').submit(function(){
 	username = $('#nameInput').val();
 	send.room = $('#roomInput').val();
 	send.name = $('#nameInput').val();
+	send.points = $('#pointsInput').val();
 	$('#roomHeader').text(send.room);
 	$('#nameHeader').text(send.name);
 	socket.emit('join room', send);

@@ -22,6 +22,7 @@ var roomProgress = {};		//contains states of rooms
 		// 2 = judging
 		// 3 = winner
 		// 4 = scoreboard
+var roomPoints = {};	//contains the number of points required to win in each room
 
 //give clients public folder, for css and js
 app.use(express.static('public'));
@@ -73,7 +74,7 @@ function ShowScore(data){
 	//first check for winner
 	var haveWinner = false;
 	for(var i = 0; i < roomRoster[data].length; i ++){
-		if((roomRoster[data])[i].points >= 2){
+		if((roomRoster[data])[i].points >= roomPoints[data]){
 			haveWinner = true;
 			io.in(data).emit('win game', (roomRoster[data])[i].name);
 			purgeRoom(data);
@@ -228,6 +229,9 @@ io.sockets.on('connection', function(socket){
 	  		//also add room to tracking room progress
 	  		if(!roomProgress.hasOwnProperty(thisRoom)){
 	  			(roomProgress[thisRoom]) = -1;
+	  		}
+	  		if(!roomPoints.hasOwnProperty(thisRoom)){
+	  			(roomPoints[thisRoom]) = data.points;
 	  		}
 	  		socket.emit('join success', thisRoom);
 	  		socket.emit('room roster', roomRoster[thisRoom]);
