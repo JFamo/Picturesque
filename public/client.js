@@ -196,7 +196,7 @@ socket.on('prompt', function(data){
 });
 
 socket.on('show ptw', function(data){
-	$('#ptw').text(data);
+	$('#ptw').text(data + " Points to Win");
 });
 
 socket.on('show score', function(data){
