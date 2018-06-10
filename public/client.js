@@ -19,7 +19,7 @@ var imgChunks = [];
 var SelectedFile;
 var FReader;
 var fileName;
-var Path = "http://picturesque-game.herokuapp.com/";
+var Path = "https://picturesque-game.herokuapp.com/";
 var amIJudging = false;
 
 //connect
