@@ -24,6 +24,8 @@ var roomProgress = {};		//contains states of rooms
 		// 4 = scoreboard
 var roomPoints = {};	//contains the number of points required to win in each room
 
+console.log(__dirname);
+
 //give clients public folder, for css and js
 app.use(express.static('public'));
 app.use('/Images', express.static('Images'));

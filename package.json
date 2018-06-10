@@ -2,8 +2,12 @@
   "name": "picturesque",
   "version": "0.0.1",
   "description": "An image based party game",
+  "engines": {
+    "node": "6.9.2"
+  },
   "dependencies": {
     "express": "^4.15.2",
     "socket.io": "^2.1.1"
-  }
+  },
+  "main": "./server.js"
 }
