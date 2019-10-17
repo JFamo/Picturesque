@@ -19,7 +19,7 @@ var imgChunks = [];
 var SelectedFile;
 var FReader;
 var fileName;
-var Path = "https://picturesque-game.herokuapp.com/";
+var Path = "http://192.168.1.91:8080/";
 var amIJudging = false;
 
 //connect
